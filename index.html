@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduCampus | college website</title>
+    <title>EduCampus | college portal with local DB</title>
     <!-- Font Awesome 6 (free) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -405,6 +405,34 @@
             color: #4f46e5;
         }
 
+        /* toast message */
+        .toast-message {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-weight: 500;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(4px);
+            border: 1px solid #4b5563;
+        }
+        .toast-message i { color: #34d399; }
+        .toast-message.show { display: flex; animation: fadeToast 2.5s ease; }
+        @keyframes fadeToast {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            85% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+        }
+
         /* footer */
         footer {
             background: #0e1a28;
@@ -567,6 +595,9 @@
         </div>
     </div>
 
+    <!-- toast notification -->
+    <div id="liveToast" class="toast-message"><i class="fas fa-check-circle"></i> <span id="toastText"></span></div>
+
     <!-- simple footer -->
     <footer>
         <div class="footer-content">
@@ -581,7 +612,80 @@
 
     <script>
         (function() {
-            // get elements
+            // ---------- DATABASE (localStorage) ----------
+            const DB_KEY = 'educampus_users';
+
+            // Initialize user database if not exists
+            function initDB() {
+                if (!localStorage.getItem(DB_KEY)) {
+                    // Prefill with one demo user (optional)
+                    const defaultUsers = [
+                        { name: 'Alex Johnson', email: 'alex@college.edu', password: 'demo123' }
+                    ];
+                    localStorage.setItem(DB_KEY, JSON.stringify(defaultUsers));
+                }
+            }
+            initDB();
+
+            // Get all users
+            function getUsers() {
+                return JSON.parse(localStorage.getItem(DB_KEY)) || [];
+            }
+
+            // Save users
+            function saveUsers(users) {
+                localStorage.setItem(DB_KEY, JSON.stringify(users));
+            }
+
+            // Find user by email (returns user object or undefined)
+            function findUserByEmail(email) {
+                const users = getUsers();
+                return users.find(u => u.email.toLowerCase() === email.toLowerCase());
+            }
+
+            // Add new user (returns true if success, false if email exists)
+            function addUser(name, email, password) {
+                const users = getUsers();
+                if (users.some(u => u.email.toLowerCase() === email.toLowerCase())) {
+                    return false; // duplicate
+                }
+                users.push({ name, email, password });
+                saveUsers(users);
+                return true;
+            }
+
+            // Validate login
+            function validateLogin(email, password) {
+                const users = getUsers();
+                const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+                return user || null;
+            }
+
+            // ---------- UI Helpers ----------
+            const toast = document.getElementById('liveToast');
+            const toastText = document.getElementById('toastText');
+
+            function showToast(msg, isSuccess = true) {
+                toastText.innerText = msg;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2500);
+            }
+
+            // Clear modal fields (optional)
+            function clearLoginFields() {
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
+            }
+            function clearSignupFields() {
+                document.getElementById('signupName').value = '';
+                document.getElementById('signupEmail').value = '';
+                document.getElementById('signupPassword').value = '';
+                document.getElementById('signupConfirm').value = '';
+            }
+
+            // ---------- Modal controls ----------
             const loginModal = document.getElementById('loginModal');
             const signupModal = document.getElementById('signupModal');
             const loginBtn = document.getElementById('loginBtn');
@@ -591,21 +695,21 @@
             const switchToSignup = document.getElementById('switchToSignup');
             const switchToLogin = document.getElementById('switchToLogin');
 
-            // open login modal, hide signup if open
             function openLogin() {
                 signupModal.classList.remove('active');
                 loginModal.classList.add('active');
+                clearLoginFields();
             }
             function openSignup() {
                 loginModal.classList.remove('active');
                 signupModal.classList.add('active');
+                clearSignupFields();
             }
             function closeAll() {
                 loginModal.classList.remove('active');
                 signupModal.classList.remove('active');
             }
 
-            // event listeners
             loginBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 openLogin();
@@ -625,56 +729,76 @@
                 openLogin();
             });
 
-            // optional: close modal when clicking outside modal-card
             window.addEventListener('click', (e) => {
                 if (e.target === loginModal) loginModal.classList.remove('active');
                 if (e.target === signupModal) signupModal.classList.remove('active');
             });
-
-            // just for demo: login/signup buttons show alert (mock functionality)
-            document.getElementById('performLogin').addEventListener('click', (e) => {
-                e.preventDefault();
-                const email = document.getElementById('loginEmail').value.trim();
-                if (!email) {
-                    alert('Please enter email (demo)');
-                } else {
-                    alert(`Demo login attempt with ${email} (no real auth)`);
-                    // optionally close modal
-                    closeAll();
-                }
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeAll();
             });
 
+            // ---------- SIGNUP action with database ----------
             document.getElementById('performSignup').addEventListener('click', (e) => {
                 e.preventDefault();
                 const name = document.getElementById('signupName').value.trim();
+                const email = document.getElementById('signupEmail').value.trim();
                 const pwd = document.getElementById('signupPassword').value;
                 const confirm = document.getElementById('signupConfirm').value;
-                if (!name || !pwd) {
-                    alert('Please fill in name and password (demo)');
-                } else if (pwd !== confirm) {
-                    alert('Passwords do not match!');
-                } else {
-                    alert(`Welcome, ${name}! (demo signup — no data saved)`);
+
+                if (!name || !email || !pwd) {
+                    showToast('Please fill in all fields', false);
+                    return;
+                }
+                if (pwd !== confirm) {
+                    showToast('Passwords do not match', false);
+                    return;
+                }
+                if (pwd.length < 4) {
+                    showToast('Password must be at least 4 characters', false);
+                    return;
+                }
+
+                const success = addUser(name, email, pwd);
+                if (success) {
+                    showToast(`Welcome, ${name}! Account created. You can now log in.`, true);
                     closeAll();
+                    // optional: switch to login after signup
+                    // openLogin();
+                } else {
+                    showToast('An account with this email already exists.', false);
                 }
             });
 
-            // slight improvement: close also on escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
+            // ---------- LOGIN action with database ----------
+            document.getElementById('performLogin').addEventListener('click', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('loginEmail').value.trim();
+                const pwd = document.getElementById('loginPassword').value;
+
+                if (!email || !pwd) {
+                    showToast('Please enter both email and password', false);
+                    return;
+                }
+
+                const user = validateLogin(email, pwd);
+                if (user) {
+                    showToast(`✅ Logged in as ${user.name} (demo session)`, true);
                     closeAll();
+                } else {
+                    showToast('Invalid email or password. Try alex@college.edu / demo123', false);
                 }
             });
+
+            // For better UX: prefill demo credentials if user clicks on login (optional)
+            // Not autofilling to keep it clean, but we added hint in error.
+
         })();
     </script>
-    <!-- little extra style for demo purpose -->
+    <!-- extra style for demo -->
     <style>
-        /* active state smoothness */
-        .modal { transition: backdrop-filter 0.2s; }
-        .btn-outline-light, .btn-primary-glow { cursor: pointer; }
-        #switchToSignup, #switchToLogin { cursor: pointer; font-weight: 600; }
         .feature-card i.fa-arrow-right { transition: transform 0.2s; }
         .feature-card:hover i.fa-arrow-right { transform: translateX(5px); }
+        .toast-message i { font-size: 1.2rem; }
     </style>
 </body>
 </html>
