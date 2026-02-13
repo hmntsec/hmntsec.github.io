@@ -1,115 +1,680 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Portfolio</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduCampus | college website</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
 
-<style>
-body{
-    margin:0;
-    font-family: Arial, sans-serif;
-    background:#0f172a;
-    color:white;
-}
+        body {
+            background: #f4f7fc;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-header{
-    background:#020617;
-    padding:15px 30px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
+        /* modern header / navbar */
+        .navbar {
+            background: rgba(18, 25, 40, 0.95);
+            backdrop-filter: blur(8px);
+            color: white;
+            padding: 0.8rem 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-nav a{
-    color:white;
-    margin-left:20px;
-    text-decoration:none;
-    font-weight:bold;
-}
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-.hero{
-    height:90vh;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-}
+        .logo i {
+            font-size: 2.2rem;
+            color: #6c8cff;
+            background: rgba(255,255,255,0.1);
+            padding: 8px;
+            border-radius: 14px;
+        }
 
-.hero h1{
-    font-size:48px;
-    margin-bottom:10px;
-}
+        .logo span {
+            font-weight: 700;
+            font-size: 1.6rem;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff, #cfd9ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-.hero p{
-    font-size:20px;
-    color:#94a3b8;
-}
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
 
-.btn{
-    margin-top:20px;
-    padding:12px 25px;
-    background:#22c55e;
-    border:none;
-    color:white;
-    font-size:16px;
-    border-radius:6px;
-    cursor:pointer;
-}
+        .nav-links a {
+            color: #eef2ff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+            font-size: 1rem;
+        }
 
-section{
-    padding:60px 20px;
-    text-align:center;
-}
+        .nav-links a:hover {
+            color: white;
+            text-shadow: 0 0 8px #6c8cff;
+        }
 
-footer{
-    background:#020617;
-    padding:20px;
-    text-align:center;
-    color:#94a3b8;
-}
-</style>
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-outline-light {
+            background: transparent;
+            border: 1.5px solid rgba(255,255,255,0.4);
+            color: white;
+            padding: 0.5rem 1.4rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-outline-light:hover {
+            border-color: white;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .btn-primary-glow {
+            background: #4f46e5;
+            border: none;
+            color: white;
+            padding: 0.5rem 1.8rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+            transition: 0.2s;
+        }
+
+        .btn-primary-glow:hover {
+            background: #6366f1;
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+        }
+
+        /* hero section */
+        .hero {
+            background: linear-gradient(145deg, #0b1a33 0%, #1a2b4a 100%);
+            color: white;
+            padding: 3.5rem 5% 5rem;
+            border-bottom-left-radius: 3rem;
+            border-bottom-right-radius: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .hero-content {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .hero-text {
+            flex: 1 1 300px;
+        }
+
+        .hero-text h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            background: linear-gradient(to right, #ffffff, #bdd3ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            margin: 1.5rem 0 2rem;
+            color: #cfdfff;
+            max-width: 550px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .stat-label {
+            color: #a5b9ff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.85rem;
+        }
+
+        .hero-image {
+            flex: 1 1 300px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero-image i {
+            font-size: 14rem;
+            color: #4f70df;
+            opacity: 0.7;
+            filter: drop-shadow(0 10px 20px #00000050);
+        }
+
+        /* cards / features */
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            max-width: 1300px;
+            margin: 0 auto 4rem;
+            padding: 0 5%;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem 2rem 2rem 2rem;
+            border-radius: 2rem;
+            flex: 1 1 250px;
+            box-shadow: 0 20px 30px -10px rgba(0, 20, 40, 0.15);
+            transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.6);
+            backdrop-filter: blur(2px);
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 40px -12px #1e2b4f50;
+        }
+
+        .feature-icon {
+            background: #e8eeff;
+            width: 70px;
+            height: 70px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        .feature-icon i {
+            font-size: 2.2rem;
+            color: #2f3c7e;
+        }
+
+        .feature-card h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .feature-card p {
+            color: #4b5563;
+            margin: 0.5rem 0 1.5rem;
+        }
+
+        .card-link {
+            color: #4f46e5;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* modal styles (login / signup) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-card {
+            background: white;
+            max-width: 430px;
+            width: 90%;
+            padding: 2.3rem 2rem;
+            border-radius: 40px;
+            box-shadow: 0 30px 60px rgba(8, 20, 40, 0.5);
+            animation: modalPop 0.3s ease;
+            position: relative;
+        }
+
+        @keyframes modalPop {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #9ca3af;
+            transition: 0.2s;
+        }
+        .close-modal:hover { color: #1f2937; }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9aa6b8;
+            font-size: 1.2rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #e5e9f0;
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: 0.2s;
+            background: #f9fbfe;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(79,70,229,0.15);
+        }
+
+        .btn-modal {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 50px;
+            background: #111827;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            margin: 0.5rem 0 1rem;
+        }
+
+        .btn-modal:hover {
+            background: #2d3b5e;
+        }
+
+        .modal-footer {
+            text-align: center;
+            color: #4b5563;
+        }
+        .modal-footer span {
+            color: #4f46e5;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .separator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #9ca3af;
+            margin: 1.2rem 0;
+        }
+        .separator hr { flex: 1; border: none; border-top: 1px solid #e2e8f0; }
+
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        .social-circle {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: #f1f4f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #374151;
+            font-size: 1.4rem;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .social-circle:hover {
+            background: #e0e7ff;
+            color: #4f46e5;
+        }
+
+        /* footer */
+        footer {
+            background: #0e1a28;
+            color: #b0c4de;
+            padding: 2rem 5%;
+            margin-top: auto;
+            border-top-left-radius: 2rem;
+            border-top-right-radius: 2rem;
+        }
+        .footer-content {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        .footer-copyright {
+            font-size: 0.95rem;
+        }
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+        .footer-links a {
+            color: #b0c4de;
+            text-decoration: none;
+        }
+        .footer-links a:hover { color: white; }
+
+        /* responsive tweaks */
+        @media (max-width: 700px) {
+            .navbar { flex-direction: column; gap: 0.8rem; }
+            .hero-text h1 { font-size: 2.5rem; }
+            .hero-image i { font-size: 8rem; }
+        }
+    </style>
 </head>
-
 <body>
+    <!-- modern navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-landmark"></i>
+            <span>EduCampus</span>
+        </div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">Academics</a>
+            <a href="#">Admissions</a>
+            <a href="#">Campus</a>
+            <a href="#">Research</a>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn-outline-light" id="loginBtn"><i class="fas fa-sign-in-alt" style="margin-right: 6px;"></i>Log in</button>
+            <button class="btn-primary-glow" id="signupBtn">Sign up</button>
+        </div>
+    </nav>
 
-<header>
-<h2>My Website</h2>
-<nav>
-<a href="#">Home</a>
-<a href="#">About</a>
-<a href="#">Projects</a>
-<a href="#">Contact</a>
-</nav>
-</header>
+    <!-- hero section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Shape your future<br>at EduCampus</h1>
+                <p>Join a vibrant community of thinkers, creators, and leaders. World‑class faculty, global opportunities.</p>
+                <div class="hero-stats">
+                    <div class="stat-item"><span class="stat-number">15k+</span><span class="stat-label">students</span></div>
+                    <div class="stat-item"><span class="stat-number">140+</span><span class="stat-label">programs</span></div>
+                    <div class="stat-item"><span class="stat-number">#12</span><span class="stat-label">national rank</span></div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <i class="fas fa-university"></i>
+            </div>
+        </div>
+    </section>
 
-<div class="hero">
-    <img src="charvi.jpeg" alt="Hemanth Photo" class="profile-pic">
+    <!-- feature / callout cards -->
+    <section class="features">
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-flask"></i></div>
+            <h3>Innovation lab</h3>
+            <p>State‑of‑the‑art research facilities & startup incubator.</p>
+            <a href="#" class="card-link">Explore <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-globe-asia"></i></div>
+            <h3>Global campus</h3>
+            <p>200+ partner universities & semester abroad programs.</p>
+            <a href="#" class="card-link">Explore <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-graduation-cap"></i></div>
+            <h3>Scholarships</h3>
+            <p>Merit & need‑based aid — make your education affordable.</p>
+            <a href="#" class="card-link">Explore <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </section>
 
-<h1>Hello 👋 I'm Hemanth</h1>
-<p>cybersecurity Student | Web Learner | Cybersecurity Beginner</p>
-    <a href="https://www.instagram.com/p/DMfS_LZzLjd/?igsh=MWp4cGo3aWN3MGp1dA==" target="_blank">
-  <button class="btn">View My profile</button>
-</a>
-    <a href="https://www.instagram.com/reel/DUdS81dgazw/?igsh=MWU5MTVmYWY2Zmc2ag==" target="_blank">
-  <button class="btn">View My reel</button>
-</a>
-</div>
+    <!-- LOGIN MODAL -->
+    <div id="loginModal" class="modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Welcome back</h2>
+                <button class="close-modal" id="closeLogin">&times;</button>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" placeholder="E-mail address" id="loginEmail">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" placeholder="Password" id="loginPassword">
+            </div>
+            <button class="btn-modal" id="performLogin">Log in to portal</button>
+            <div class="separator"><hr> or <hr></div>
+            <div class="social-login">
+                <div class="social-circle"><i class="fab fa-google"></i></div>
+                <div class="social-circle"><i class="fab fa-facebook-f"></i></div>
+                <div class="social-circle"><i class="fab fa-apple"></i></div>
+            </div>
+            <div class="modal-footer">
+                Don't have an account? <span id="switchToSignup">Sign up</span>
+            </div>
+        </div>
+    </div>
 
-<section>
-<h2>About Me</h2>
-<p>I am learning web development and cybersecurity. This website is hosted using GitHub Pages.</p>
-</section>
+    <!-- SIGNUP MODAL -->
+    <div id="signupModal" class="modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Join EduCampus</h2>
+                <button class="close-modal" id="closeSignup">&times;</button>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" placeholder="Full name" id="signupName">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" placeholder="E-mail address" id="signupEmail">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" placeholder="Password" id="signupPassword">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-check-circle"></i>
+                <input type="password" placeholder="Confirm password" id="signupConfirm">
+            </div>
+            <button class="btn-modal" id="performSignup">Create account</button>
+            <div class="separator"><hr> or <hr></div>
+            <div class="social-login">
+                <div class="social-circle"><i class="fab fa-google"></i></div>
+                <div class="social-circle"><i class="fab fa-facebook-f"></i></div>
+                <div class="social-circle"><i class="fab fa-apple"></i></div>
+            </div>
+            <div class="modal-footer">
+                Already have an account? <span id="switchToLogin">Log in</span>
+            </div>
+        </div>
+    </div>
 
-<section>
-<h2>My Projects</h2>
-<p>Coming Soon...</p>
-</section>
+    <!-- simple footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-copyright">© 2025 EduCampus College. All rights reserved.</div>
+            <div class="footer-links">
+                <a href="#">Privacy</a>
+                <a href="#">Accessibility</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </footer>
 
-<footer>
-<p>© 2026 My Portfolio</p>
-</footer>
+    <script>
+        (function() {
+            // get elements
+            const loginModal = document.getElementById('loginModal');
+            const signupModal = document.getElementById('signupModal');
+            const loginBtn = document.getElementById('loginBtn');
+            const signupBtn = document.getElementById('signupBtn');
+            const closeLogin = document.getElementById('closeLogin');
+            const closeSignup = document.getElementById('closeSignup');
+            const switchToSignup = document.getElementById('switchToSignup');
+            const switchToLogin = document.getElementById('switchToLogin');
 
+            // open login modal, hide signup if open
+            function openLogin() {
+                signupModal.classList.remove('active');
+                loginModal.classList.add('active');
+            }
+            function openSignup() {
+                loginModal.classList.remove('active');
+                signupModal.classList.add('active');
+            }
+            function closeAll() {
+                loginModal.classList.remove('active');
+                signupModal.classList.remove('active');
+            }
+
+            // event listeners
+            loginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openLogin();
+            });
+            signupBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openSignup();
+            });
+            closeLogin.addEventListener('click', closeAll);
+            closeSignup.addEventListener('click', closeAll);
+            switchToSignup.addEventListener('click', (e) => {
+                e.preventDefault();
+                openSignup();
+            });
+            switchToLogin.addEventListener('click', (e) => {
+                e.preventDefault();
+                openLogin();
+            });
+
+            // optional: close modal when clicking outside modal-card
+            window.addEventListener('click', (e) => {
+                if (e.target === loginModal) loginModal.classList.remove('active');
+                if (e.target === signupModal) signupModal.classList.remove('active');
+            });
+
+            // just for demo: login/signup buttons show alert (mock functionality)
+            document.getElementById('performLogin').addEventListener('click', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('loginEmail').value.trim();
+                if (!email) {
+                    alert('Please enter email (demo)');
+                } else {
+                    alert(`Demo login attempt with ${email} (no real auth)`);
+                    // optionally close modal
+                    closeAll();
+                }
+            });
+
+            document.getElementById('performSignup').addEventListener('click', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('signupName').value.trim();
+                const pwd = document.getElementById('signupPassword').value;
+                const confirm = document.getElementById('signupConfirm').value;
+                if (!name || !pwd) {
+                    alert('Please fill in name and password (demo)');
+                } else if (pwd !== confirm) {
+                    alert('Passwords do not match!');
+                } else {
+                    alert(`Welcome, ${name}! (demo signup — no data saved)`);
+                    closeAll();
+                }
+            });
+
+            // slight improvement: close also on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeAll();
+                }
+            });
+        })();
+    </script>
+    <!-- little extra style for demo purpose -->
+    <style>
+        /* active state smoothness */
+        .modal { transition: backdrop-filter 0.2s; }
+        .btn-outline-light, .btn-primary-glow { cursor: pointer; }
+        #switchToSignup, #switchToLogin { cursor: pointer; font-weight: 600; }
+        .feature-card i.fa-arrow-right { transition: transform 0.2s; }
+        .feature-card:hover i.fa-arrow-right { transform: translateX(5px); }
+    </style>
 </body>
 </html>
